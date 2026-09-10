@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@200..800&display=swap');
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+:root {
+  --primary: #e11d48; /* shadcn rose-600 */
+  --secondary: #3f414d;
+  --accent: #f3f3f3;
+  --gold: #D4AF37;
+  --rose-gold: #B76E79;
+  --pearl: #fdfcf0;
+  --champagne: #F7E7CE;
+  --charcoal: #1A1A1A;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: #3f414d;
+  background-color: #ffffff;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom Utilities */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Form Styles */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+}
+
+/* Page Transitions */
+.page-fade-enter {
+  opacity: 0;
+}
+.page-fade-enter-active {
+  opacity: 1;
+  transition: opacity 300ms ease-in;
+}
+
+/* Button Animations */
+.btn-premium {
+  @apply transition-all duration-300 transform active:scale-95 hover:brightness-110;
+}
+
+/* Glassmorphism helpers */
+.glass {
+  @apply bg-white/70 backdrop-blur-md border border-white/20;
+}
+
+/* Custom shadows */
+.shadow-premium {
+  box-shadow: 0 10px 30px -5px rgba(252, 39, 121, 0.1);
+}
+
+.shadow-soft {
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.05);
+}
+
+.shadow-gold {
+  box-shadow: 0 10px 25px -5px rgba(212, 175, 55, 0.15);
+}
+
+/* Gradients */
+.bg-mesh-pearl {
+  background-color: #ffffff;
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(339,49%,91%,1) 0, transparent 50%), 
+    radial-gradient(at 50% 0%, hsla(225,39%,90%,1) 0, transparent 50%), 
+    radial-gradient(at 100% 0%, hsla(339,49%,91%,1) 0, transparent 50%);
+}
+
+.bg-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.bg-shimmer::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transform: skewX(-20deg);
+  animation: shimmer-effect 3s infinite;
+}
+
+@keyframes shimmer-effect {
+  0% { left: -100%; }
+  100% { left: 200%; }
+}
