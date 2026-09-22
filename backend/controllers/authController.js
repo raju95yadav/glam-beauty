@@ -1,7 +1,7 @@
 const User = require('../models/User');
 const generateOTP = require('../utils/generateOTP');
 const generateToken = require('../utils/generateToken');
-const { sendEmail } = require('../services/emailService');
+const { sendOTPEmail } = require('../services/emailService');
 const { OAuth2Client } = require('google-auth-library');
 
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
@@ -40,28 +40,23 @@ const sendOTP = async (req, res) => {
 
     console.log(`User DB update successful.`);
 
-    const message = `Your Login OTP is ${otp}. It will expire in 5 minutes.`;
-
     // Log OTP to console for debugging/fallback
     console.log('------------------------------------');
     console.log(`LOGIN OTP for ${email}: ${otp}`);
     console.log('------------------------------------');
 
     try {
-      await sendEmail({
-        email,
-        subject: 'Login OTP',
-        message,
-      });
+      const emailInfo = await sendOTPEmail(email, otp);
+      console.log(`[Email Service] ✅ OTP email sent to ${email}. MessageId: ${emailInfo.messageId}`);
     } catch (emailError) {
-      console.error('Email sending failed, but OTP is logged to console:', emailError.message);
-      return res.status(200).json({
-        success: true,
-        message: 'OTP generated (Check server logs for code if email fails)'
+      console.error('[Email Service] ❌ Email sending failed:', emailError.message);
+      return res.status(500).json({
+        success: false,
+        message: 'Failed to send OTP to your email. Please verify your email address or check server configuration.'
       });
     }
 
-    res.status(200).json({ success: true, message: 'OTP sent to email' });
+    res.status(200).json({ success: true, message: 'OTP sent to email successfully' });
   } catch (error) {
     console.error('CRITICAL Send OTP error:', error);
     res.status(500).json({ message: 'Error generating OTP', error: error.message });
